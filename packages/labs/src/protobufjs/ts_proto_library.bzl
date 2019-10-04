@@ -13,7 +13,7 @@
 # limitations under the License.
 "Protocol Buffers"
 
-load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo", "JSEcmaScriptModuleInfo", "JSNamedModuleInfo")
+load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo", "JSEcmaScriptModuleInfo", "JSModuleInfo", "JSNamedModuleInfo")
 
 def _run_pbjs(actions, executable, output_name, proto_files, suffix = ".js", wrap = "amd", amd_name = ""):
     js_file = actions.declare_file(output_name + suffix)
@@ -116,6 +116,10 @@ def _ts_proto_library(ctx):
             DeclarationInfo(
                 declarations = declarations,
                 transitive_declarations = declarations,
+            ),
+            JSModuleInfo(
+                sources = es5_sources,
+                module_format = "amd",
             ),
             JSNamedModuleInfo(
                 direct_sources = es5_sources,

@@ -6,7 +6,7 @@ If all users of your library code use Bazel, they should just add your library
 to the `deps` of one of their targets.
 """
 
-load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo", "JSNamedModuleInfo")
+load("@build_bazel_rules_nodejs//:providers.bzl", "DeclarationInfo", "JSModuleInfo")
 
 # Takes a depset of files and returns a corresponding list of file paths without any files
 # that aren't part of the specified package path. Also include files from external repositories
@@ -105,9 +105,8 @@ def _npm_package(ctx):
         sources_depsets.append(dep.files)
 
         # All direct & transitive JavaScript-producing deps
-        # TODO: switch to JSModuleInfo when it is available
-        if JSNamedModuleInfo in dep:
-            sources_depsets.append(dep[JSNamedModuleInfo].sources)
+        if JSModuleInfo in dep:
+            sources_depsets.append(dep[JSModuleInfo].sources)
 
         # Include all transitive declerations
         if DeclarationInfo in dep:

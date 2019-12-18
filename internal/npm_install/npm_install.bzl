@@ -352,6 +352,9 @@ def _yarn_install_impl(repository_ctx):
     if repository_ctx.attr.frozen_lockfile:
         args.append("--frozen-lockfile")
 
+    if repository_ctx.attr.ignore_optional:
+        args.append("--ignore-optinal")
+
     if repository_ctx.attr.prod_only:
         args.append("--prod")
     if not repository_ctx.attr.use_global_yarn_cache:
@@ -389,6 +392,14 @@ yarn_install = repository_rule(
         "frozen_lockfile": attr.bool(
             default = False,
             doc = """Passes the --frozen-lockfile flag to prevent updating yarn.lock.
+
+Note that enabling this option will require that you run yarn outside of Bazel
+when making changes to package.json.
+""",
+        ),
+        "ignore_optional": attr.bool(
+            default = False,
+            doc = """Passes the --ignore-optional flag to prevent updating yarn.lock.
 
 Note that enabling this option will require that you run yarn outside of Bazel
 when making changes to package.json.
